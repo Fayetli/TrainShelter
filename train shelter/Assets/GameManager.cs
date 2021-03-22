@@ -9,16 +9,11 @@ public class GameManager : MonoBehaviour
     private void Awake() {
         train = FindObjectOfType<Train>();
 
-        InstantiateInventory();
     }
 
-
-    private void InstantiateInventory(){
-        Inventory.Instance.AddItem(ItemType.Human, 5);
-        Inventory.Instance.AddItem(ItemType.Food, 5);
-        Inventory.Instance.AddItem(ItemType.Woods, 5);
-        Inventory.Instance.AddItem(ItemType.Stones, 5);
-        Inventory.Instance.AddItem(ItemType.Electric, 5);
+    private void Start() {
+        Inventory.Instance.AddItem(ItemType.Human, 10);
     }
+
 
 }

@@ -14,12 +14,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   carriages:
   - type: 1
+    defaultValue: 2
     maxWorkersValue: 3
-  - type: 0
-    maxWorkersValue: 2
-  - type: 2
-    maxWorkersValue: 5
+    addMultyplier: 0.1
+    cost:
+      items: []
   - type: 3
+    defaultValue: 5
+    maxWorkersValue: 2
+    addMultyplier: 0.09
+    cost:
+      items: []
+  - type: 2
+    defaultValue: 3
     maxWorkersValue: 5
-  - type: 1
+    addMultyplier: 0.07
+    cost:
+      items: []
+  - type: 4
+    defaultValue: 10
     maxWorkersValue: 5
+    addMultyplier: 0.07
+    cost:
+      items:
+      - type: 3
+        value: 250
+  - type: 3
+    defaultValue: 15
+    maxWorkersValue: 5
+    addMultyplier: 0.08
+    cost:
+      items:
+      - type: 3
+        value: 1500

@@ -17,13 +17,30 @@ public class Train : MonoBehaviour
             AddNewCarriage(CarriageStatus.Active);
         AddNewCarriage(CarriageStatus.Inactive);
     }
-
+    private int counter = 0;
     private void Update()
     {
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.S))
             AddNewCarriage(CarriageStatus.Inactive);
 #endif
+    }
+
+    private void FixedUpdate() {
+        counter++;
+        if(counter == 50){
+            counter = 0;
+            RealizeCarriages();
+        }
+    }
+
+    private void RealizeCarriages(){
+        cars.ForEach(c => 
+        {
+            var turple = c.Realize;
+            if(turple.value != 0)
+                Inventory.Instance.AddItem(turple.type, turple.value);
+        });
     }
 
     public void OnTrainPartChanged(CarriageStatus status)
@@ -36,10 +53,14 @@ public class Train : MonoBehaviour
     private void AddNewCarriage(CarriageStatus status)
     {
         var carriage = Instantiate(carriagePrefab, transform as RectTransform).GetComponent<ITrainPart>();
-        carriage.Init(cars.Count, status, database.carriages[cars.Count]);
+        carriage.Init(cars.Count, status, database.carriages[cars.Count], this);
         cars.Add(carriage);
     }
 
-
+    public void RealizeCarriageTap(Inventory.ItemSlot slot){
+        if(slot.value == 0)
+            return;
+        Inventory.Instance.AddItemSlot(slot);
+    }
 
 }
