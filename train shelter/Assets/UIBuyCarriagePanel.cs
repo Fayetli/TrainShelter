@@ -1,26 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIBuyCarriagePanel : MonoBehaviour
 {
     [SerializeField] private GameObject container;
-
+    public GameObject Container { get => container; }
+    [SerializeField] private Button button;
     private Carriage carriage;
 
-    //instantiate bug here
     public void Init(Carriage carriage)
     {
         this.carriage = carriage;
 
-        var componentPrefab = Resources.Load<GameObject>("BuyComponent");
+        var componentPrefab = Resources.Load<GameObject>("Component");
         var cost = carriage.BuyCost;
         cost.items.ForEach(slot =>
         {
-            var go = Instantiate(componentPrefab) as GameObject;
-            go.transform.SetParent(container.transform as RectTransform);
-            var component = go.GetComponent<UIComponent>();
-            component.ChangeAmount(slot.value);
+            var component = Instantiate(componentPrefab, container.transform as RectTransform).GetComponent<UIComponent>();
+            component.Init(slot.value, GameManager.Instance.ItemDatabase.GetSprite(slot.type));
         });
+
+        CheckButtonInteractable();
+
+        Inventory.Instance.OnInventoryChanged.AddListener(CheckButtonInteractable);
     }
+
+    public void BuyClick()
+    {
+        carriage.Buy();
+        Destroy(gameObject);
+    }
+    public void CheckButtonInteractable() => button.interactable = Inventory.Instance.HasCost(carriage.BuyCost);
+
 }

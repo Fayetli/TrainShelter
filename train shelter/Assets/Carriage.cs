@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using System.Numerics;
+using System.Collections;
 
 public enum CarriageStatus
 {
@@ -13,22 +14,22 @@ public enum CarriageStatus
 public interface ITrainPart
 {
     public CarriageStatus Status { get; }
-    void Init(int index, CarriageStatus status, CarriageDatabase.CarriageData data, Train train);
+    void Init(int index, CarriageStatus status, CarriageDatabase.CarriageData data, Train train, int lvl = 1);
     (ItemType type, BigInteger value) Realize { get; }
 }
 
-[RequireComponent(typeof(Image))]
+[RequireComponent(typeof(UICarriage))]
 public class Carriage : MonoBehaviour, ITrainPart
 {
     #region Init
-    private Image image;
+    private Train train;
     [SerializeField] private int index;
     public ItemType ItemType { get; private set; }
     public CarriageStatus Status { get; private set; }
     public Inventory.Cost BuyCost { get; private set; }
     private int maxWorkersValue;
     private int defaultValue;
-    [SerializeField] private GameObject carriageHUD;
+    [SerializeField] private UICarriage ui;
     #endregion
 
     #region Realizing
@@ -49,14 +50,10 @@ public class Carriage : MonoBehaviour, ITrainPart
     public IntUnityEvent OnWorkersCountChanged;
     public IntUnityEvent OnLvlValueChanged;
     public BigIntUnityEvent OnResourcePreTikChanged;
-    public ItemSlotUnityEvent OnCarriageTap;
-
     [System.Serializable]
     public class IntUnityEvent : UnityEvent<int> { }
     [System.Serializable]
     public class BigIntUnityEvent : UnityEvent<BigInteger> { }
-    [System.Serializable]
-    public class ItemSlotUnityEvent : UnityEvent<Inventory.ItemSlot> { }
     #endregion
 
     private void Awake()
@@ -67,11 +64,9 @@ public class Carriage : MonoBehaviour, ITrainPart
             OnLvlValueChanged = new IntUnityEvent();
         if (OnResourcePreTikChanged == null)
             OnResourcePreTikChanged = new BigIntUnityEvent();
-        if (OnCarriageTap == null)
-            OnCarriageTap = new ItemSlotUnityEvent();
 
     }
-    public void Init(int index, CarriageStatus status, CarriageDatabase.CarriageData data, Train train)
+    public void Init(int index, CarriageStatus status, CarriageDatabase.CarriageData data, Train train, int lvl = 1)
     {
         this.index = index;
         this.Status = status;
@@ -80,55 +75,48 @@ public class Carriage : MonoBehaviour, ITrainPart
         this.defaultValue = data.defaultValue;
         this.addMultyplier = data.addMultyplier;
         this.BuyCost = data.cost;
-        this.lvl = 1;
-
-        if (image == null)
-            image = GetComponent<Image>();
+        this.lvl = lvl;
+        this.train = train;
+        ui.Init(data.sprite, ItemType);
 
         OnStatusChanged += transform.parent.GetComponent<Train>().OnTrainPartChanged;
-        OnCarriageTap.AddListener(train.RealizeCarriageTap);
 
+        GenerateCost();
         ChangeSpriteStatus(false);
-
     }
 
     void ChangeSpriteStatus(bool throwEvent)
     {
-        switch (Status)
-        {
-            case CarriageStatus.Inactive:
-                image.color = new Color32(255, 255, 255, 75);
-                SpawnBuyPanel();
-                break;
-            case CarriageStatus.Active:
-                image.color = new Color32(255, 255, 255, 255);
-                carriageHUD.SetActive(true);
-                break;
-        }
+        ui.ChangeImageByStatus(Status);
 
         if (throwEvent)
             OnStatusChanged?.Invoke(Status);
     }
 
-    private void SpawnBuyPanel()
+    private void GenerateCost()
     {
-        var buyPanel = Resources.Load<GameObject>("BuyCarriagePanel");
-        Instantiate(buyPanel, transform as RectTransform);
-        var buyyer = buyPanel.GetComponent<UIBuyCarriagePanel>();
-        buyyer.Init(this);
+        BuyCost.items.ForEach(slot =>
+        {
+            slot.value = defaultValue * 100;
+        });
     }
 
     public void OnTap()
     {
-        switch (Status)
+        if (Status == CarriageStatus.Active)
         {
-            case CarriageStatus.Inactive:
-                Status = CarriageStatus.Active;
-                ChangeSpriteStatus(true);
-                break;
-            case CarriageStatus.Active:
-                OnCarriageTap?.Invoke(new Inventory.ItemSlot(ItemType, (BigInteger)((1 + addMultyplier * lvl) * defaultValue)));
-                break;
+            var slot = new Inventory.ItemSlot(ItemType, (BigInteger)((1 + addMultyplier * lvl) * defaultValue));
+            train.RealizeCarriageTap(slot);
+        }
+    }
+
+    public void Buy()
+    {
+        if (Status == CarriageStatus.Inactive)
+        {
+            Status = CarriageStatus.Active;
+            ChangeSpriteStatus(true);
+            Inventory.Instance.RemoveCost(BuyCost);
         }
     }
 

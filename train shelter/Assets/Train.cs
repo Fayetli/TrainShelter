@@ -8,8 +8,7 @@ public class Train : MonoBehaviour
 {
     List<ITrainPart> cars = new List<ITrainPart>();
     [SerializeField] private GameObject carriagePrefab;
-    [SerializeField] private CarriageDatabase database;
-    private void Awake()
+    private void Start()
     {
         cars = GetComponentsInChildren<ITrainPart>().ToList();
 
@@ -46,14 +45,14 @@ public class Train : MonoBehaviour
     public void OnTrainPartChanged(CarriageStatus status)
     {
         if(status == CarriageStatus.Active)
-            if(database.carriages.Count > cars.Count)
+            if(GameManager.Instance.CarriageDatabase.carriages.Count > cars.Count)
                 AddNewCarriage(CarriageStatus.Inactive);
     }
 
     private void AddNewCarriage(CarriageStatus status)
     {
         var carriage = Instantiate(carriagePrefab, transform as RectTransform).GetComponent<ITrainPart>();
-        carriage.Init(cars.Count, status, database.carriages[cars.Count], this);
+        carriage.Init(cars.Count, status, GameManager.Instance.CarriageDatabase.carriages[cars.Count], this);
         cars.Add(carriage);
     }
 

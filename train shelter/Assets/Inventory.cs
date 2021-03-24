@@ -1,7 +1,7 @@
 using System.Numerics;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public enum ItemType
 {
@@ -36,12 +36,16 @@ public class Inventory : MonoBehaviour
 
     public delegate void ItemDelegate(ItemType item, BigInteger amount);
     public ItemDelegate OnItemAmountChanged;
+    public UnityEvent OnInventoryChanged;
     private void Awake()
     {
         if (Instance != null)
             Destroy(gameObject);
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        if(OnInventoryChanged == null)
+            OnInventoryChanged = new UnityEvent();
     }
 
 
@@ -53,6 +57,7 @@ public class Inventory : MonoBehaviour
             items[item] += value;
 
         OnItemAmountChanged?.Invoke(item, items[item]);
+        OnInventoryChanged?.Invoke();
     }
     public void AddItem(ItemType item) => AddItem(item, 1);
     public void AddItemSlot(ItemSlot slot) => AddItem(slot.type, slot.value);
@@ -74,6 +79,7 @@ public class Inventory : MonoBehaviour
         items[item] -= value;
 
         OnItemAmountChanged?.Invoke(item, items[item]);
+        OnInventoryChanged?.Invoke();
     }
     public void RemoveItem(ItemType item) => RemoveItem(item, 1);
     public void RemoveItemSlot(ItemSlot slot) => RemoveItem(slot.type, slot.value);

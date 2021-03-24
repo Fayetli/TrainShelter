@@ -11,6 +11,7 @@ public class CarriageDatabase : ScriptableObject
     [System.Serializable]
     public class CarriageData
     {
+        public Sprite sprite;
         public ItemType type;
         public int defaultValue;
         public int maxWorkersValue;

@@ -1521,7 +1521,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
-  carriageHUD: {fileID: 5865790040064231316}
+  ui: {fileID: 3019630019062018670}
   workers: 0
   addMultyplier: 0
   OnWorkersCountChanged:
@@ -1569,9 +1569,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  OnCarriageTap:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &3019630019062018670
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1587,6 +1584,9 @@ MonoBehaviour:
   lvlTmp: {fileID: 8275522495032658453}
   resourcePerTikTmp: {fileID: 2279020941340548558}
   workersTmp: {fileID: 8553537645767962910}
+  image: {fileID: 6615745586464324833}
+  itemImage: {fileID: 1822493279670193983}
+  hud: {fileID: 5865790040064231316}
 --- !u!1 &7182797350316864458
 GameObject:
   m_ObjectHideFlags: 0

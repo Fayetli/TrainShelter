@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0616dc7e38e30e41a5ff8d7b4e49d1e, type: 3}
+  m_Name: CarriagesDatabase
+  m_EditorClassIdentifier: 
+  carriages:
+  - sprite: {fileID: -5117701924429426118, guid: 06f530f3134253d41aa6a4f46162cd23, type: 3}
+    type: 1
+    defaultValue: 2
+    maxWorkersValue: 3
+    addMultyplier: 0.1
+    cost:
+      items: []
+  - sprite: {fileID: 7353621977714259684, guid: 06f530f3134253d41aa6a4f46162cd23, type: 3}
+    type: 3
+    defaultValue: 5
+    maxWorkersValue: 2
+    addMultyplier: 0.09
+    cost:
+      items: []
+  - sprite: {fileID: 1081222845986457982, guid: 06f530f3134253d41aa6a4f46162cd23, type: 3}
+    type: 2
+    defaultValue: 3
+    maxWorkersValue: 5
+    addMultyplier: 0.07
+    cost:
+      items: []
+  - sprite: {fileID: -5342429030663673724, guid: 06f530f3134253d41aa6a4f46162cd23, type: 3}
+    type: 4
+    defaultValue: 10
+    maxWorkersValue: 5
+    addMultyplier: 0.07
+    cost:
+      items:
+      - type: 3
+  - sprite: {fileID: 7353621977714259684, guid: 06f530f3134253d41aa6a4f46162cd23, type: 3}
+    type: 3
+    defaultValue: 15
+    maxWorkersValue: 5
+    addMultyplier: 0.08
+    cost:
+      items:
+      - type: 3
+      - type: 4
