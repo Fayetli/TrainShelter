@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Numerics;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,7 +14,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if(Instance != null)
+        if (Instance != null)
             Destroy(gameObject);
         Instance = this;
         DontDestroyOnLoad(gameObject);
@@ -27,7 +26,21 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         Inventory.Instance.AddItem(ItemType.Human, 10);
+
     }
 
+    private void Update()
+    {
+#if UNITY_EDITOR
+        if (Input.GetKey(KeyCode.C))
+        {
+            Inventory.Instance.AddItem(ItemType.Human, 1000);
+            Inventory.Instance.AddItem(ItemType.Electric, 1000);
+            Inventory.Instance.AddItem(ItemType.Food, 1000);
+            Inventory.Instance.AddItem(ItemType.Stones, 1000);
+            Inventory.Instance.AddItem(ItemType.Woods, 1000);
+        }
+#endif
+    }
 
 }

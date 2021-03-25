@@ -18,6 +18,18 @@ public class Inventory : MonoBehaviour
     public class Cost
     {
         public List<ItemSlot> items;
+
+        public Cost Copy()
+        {
+            var cost = new Cost();
+            cost.items = new List<ItemSlot>();
+            this.items.ForEach(s =>
+            {
+                var tempSlot = new ItemSlot(s.type, s.value);
+                cost.items.Add(tempSlot);
+            });
+            return cost;   
+        }
     }
 
     [System.Serializable]
@@ -25,8 +37,9 @@ public class Inventory : MonoBehaviour
     {
         public ItemType type;
         public BigInteger value;
-        public ItemSlot(){}
-        public ItemSlot(ItemType type, BigInteger value){
+        public ItemSlot() { }
+        public ItemSlot(ItemType type, BigInteger value)
+        {
             this.type = type;
             this.value = value;
         }
@@ -44,7 +57,7 @@ public class Inventory : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        if(OnInventoryChanged == null)
+        if (OnInventoryChanged == null)
             OnInventoryChanged = new UnityEvent();
     }
 

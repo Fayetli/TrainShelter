@@ -27,6 +27,14 @@ public class Carriage : MonoBehaviour, ITrainPart
     public ItemType ItemType { get; private set; }
     public CarriageStatus Status { get; private set; }
     public Inventory.Cost BuyCost { get; private set; }
+    public Inventory.Cost UpgradeCost {
+        get
+        {
+            var cost = BuyCost.Copy();
+            cost.items.ForEach(s => s.value *= (BigInteger)Mathf.Pow(lvl, 1.5f));
+            return cost;
+        }
+    }
     private int maxWorkersValue;
     private int defaultValue;
     [SerializeField] private UICarriage ui;
@@ -38,9 +46,11 @@ public class Carriage : MonoBehaviour, ITrainPart
     public int lvl { get; private set; }
     public (ItemType type, BigInteger value) Realize
     {
-        get => (ItemType, (BigInteger)((1 + addMultyplier * lvl) * workers * defaultValue));
+        get => (ItemType, (BigInteger)(ResourcePerUnit * workers));
     }
-
+    public BigInteger ResourcePerUnit {
+        get => (BigInteger)((1 + addMultyplier * lvl)*defaultValue);
+    }
     #endregion
 
     #region Delegates
@@ -122,6 +132,7 @@ public class Carriage : MonoBehaviour, ITrainPart
 
     public void UpLvl()
     {
+        Inventory.Instance.RemoveCost(UpgradeCost);
         lvl++;
         OnLvlValueChanged?.Invoke(lvl);
         ThrowResourceEvent();

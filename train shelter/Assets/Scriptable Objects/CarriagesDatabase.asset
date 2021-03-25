@@ -19,21 +19,24 @@ MonoBehaviour:
     maxWorkersValue: 3
     addMultyplier: 0.1
     cost:
-      items: []
+      items:
+      - type: 1
   - sprite: {fileID: 7353621977714259684, guid: 06f530f3134253d41aa6a4f46162cd23, type: 3}
     type: 3
     defaultValue: 5
     maxWorkersValue: 2
     addMultyplier: 0.09
     cost:
-      items: []
+      items:
+      - type: 3
   - sprite: {fileID: 1081222845986457982, guid: 06f530f3134253d41aa6a4f46162cd23, type: 3}
     type: 2
     defaultValue: 3
     maxWorkersValue: 5
     addMultyplier: 0.07
     cost:
-      items: []
+      items:
+      - type: 2
   - sprite: {fileID: -5342429030663673724, guid: 06f530f3134253d41aa6a4f46162cd23, type: 3}
     type: 4
     defaultValue: 10

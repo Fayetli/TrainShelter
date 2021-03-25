@@ -18,19 +18,19 @@ public class UIHUD : MonoBehaviour
         switch (item)
         {
             case ItemType.Human:
-                humanAmount.text = value.ToString();
+                humanAmount.text = value.ParseToString();
                 break;
             case ItemType.Food:
-                foodAmount.text = value.ToString();
+                foodAmount.text = value.ParseToString();
                 break;
             case ItemType.Electric:
-                electricAmount.text = value.ToString();
+                electricAmount.text = value.ParseToString();
                 break;
             case ItemType.Woods:
-                woodAmount.text = value.ToString();
+                woodAmount.text = value.ParseToString();
                 break;
             case ItemType.Stones:
-                stoneAmount.text = value.ToString();
+                stoneAmount.text = value.ParseToString();
                 break;
             default:
                 Debug.LogError("Error item type");

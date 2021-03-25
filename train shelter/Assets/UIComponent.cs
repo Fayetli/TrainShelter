@@ -14,6 +14,6 @@ public class UIComponent : MonoBehaviour
         ChangeAmount(amount);
     }
     public void ChangeSprite(Sprite sprite) => image.sprite = sprite;
-    public void ChangeAmount(BigInteger amount) => count.text = amount.ToString();
+    public void ChangeAmount(BigInteger amount) => count.text = amount.ParseToString();
     
 }

@@ -13,15 +13,24 @@ public class UICarriage : MonoBehaviour
     [SerializeField] private Image image;
     [SerializeField] private Image itemImage;
     [SerializeField] private GameObject hud;
+    [SerializeField] private UICarriageInfoPanel infoPanel;
     public void ChangeLvl(int value) => lvlTmp.text = "Lv. " + value;
-    public void ChangeResourcePerTik(BigInteger value) => resourcePerTikTmp.text = value + "/s";
+    public void ChangeResourcePerTik(BigInteger value) => resourcePerTikTmp.text = value.ParseToString() + "/s";
     public void ChangeWorkersAmount(int amount) => workersTmp.text = amount.ToString();
+    [SerializeField] private Button upgradeButton;
 
-    private void Awake() {
+    private void Awake()
+    {
         carriage = GetComponent<Carriage>();
     }
 
-    public void Init(Sprite sprite, ItemType type){
+    private void Start() {
+        CheckButtonInteractable();
+        Inventory.Instance.OnInventoryChanged.AddListener(CheckButtonInteractable);
+    }
+
+    public void Init(Sprite sprite, ItemType type)
+    {
         image.sprite = sprite;
         itemImage.sprite = GameManager.Instance.ItemDatabase.GetSprite(type);
     }
@@ -48,4 +57,16 @@ public class UICarriage : MonoBehaviour
     }
 
     public void HUDSetActive(bool active) => hud.SetActive(active);
+    public void CheckButtonInteractable() => upgradeButton.interactable = Inventory.Instance.HasCost(carriage.UpgradeCost);
+    public void UpgradeCarriage()
+    {
+        if (!Inventory.Instance.HasCost(carriage.UpgradeCost))
+            Debug.LogError("Hasn`t upgrade cost");
+        carriage.UpLvl();
+
+        if(infoPanel.gameObject.activeInHierarchy)
+            infoPanel.ShowUpgradeComponent();
+    }
+    public void ActiveInfoPanel() => infoPanel.gameObject.SetActive(!infoPanel.gameObject.activeInHierarchy);
+
 }
